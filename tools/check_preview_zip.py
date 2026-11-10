@@ -17,7 +17,7 @@ def check(path):
                 errors.append(f'unsafe archive path: {name}')
             if not name.endswith('.html'): continue
             data=z.read(name).decode('utf-8',errors='replace')
-            if not re.search(r'<title\\b[^>]*>.*?</title>',data,re.I|re.S):
+            if not re.search(r'<title[^>]*>.*?</title>', data, re.I | re.S):
                 errors.append(f'no title: {name}')
             for ref in re.findall(r"""(?:src|href)\s*=\s*["']([^"']+)""", data, re.I):
                 if ref.startswith(('#','//')) or urlsplit(ref).scheme or ref.startswith(('tel:','mailto:')): continue
