@@ -19,7 +19,7 @@ def check(path):
             data=z.read(name).decode('utf-8',errors='replace')
             if not re.search(r'<title\\b[^>]*>.*?</title>',data,re.I|re.S):
                 errors.append(f'no title: {name}')
-            for ref in re.findall(r'(?:src|href)\\s*=\\s*[\"\\']([^\"\\']+)',data,re.I):
+            for ref in re.findall(r"""(?:src|href)\s*=\s*["']([^"']+)""", data, re.I):
                 if ref.startswith(('#','//')) or urlsplit(ref).scheme or ref.startswith(('tel:','mailto:')): continue
                 dest=unquote(urlsplit(ref).path)
                 if not dest or '{' in dest or dest.startswith('/'): continue
@@ -30,5 +30,5 @@ def check(path):
 
 if __name__=='__main__':
     if len(sys.argv)!=2: sys.exit('Usage: python3 tools/check_preview_zip.py path/to/preview.zip')
-    errors=check(sys.argv[1]); print('\\n'.join(errors) if errors else 'PASS: ZIP integrity and required paths')
+    errors=check(sys.argv[1]); print('\n'.join(errors) if errors else 'PASS: ZIP integrity and required paths')
     sys.exit(bool(errors))
